@@ -199,33 +199,78 @@ npm run dev
 
 This platform is fully instrumented with the **Four Golden Signals**:
 
-### 1. 🕐 Latency
+---
+
+<table>
+<tr>
+<td width="60" align="center">
+
+![Latency](./latency.svg)
+
+</td>
+<td>
+
+### 1. Latency
 ```
 order_processing_duration_seconds — histogram of end-to-end order processing time
 api_request_duration_seconds      — REST API response time by endpoint
 kafka_consumer_lag_seconds        — time between message produced and consumed
 ```
 
-### 2. 📶 Traffic
+</td>
+</tr>
+<tr>
+<td width="60" align="center">
+
+![Traffic](./traffic.svg)
+
+</td>
+<td>
+
+### 2. Traffic
 ```
 orders_created_total              — counter of all orders entering the system
 kafka_messages_produced_total     — total messages published to Kafka
 kafka_messages_consumed_total     — total messages processed by consumers
 ```
 
-### 3. ❌ Errors
+</td>
+</tr>
+<tr>
+<td width="60" align="center">
+
+![Errors](./errors.svg)
+
+</td>
+<td>
+
+### 3. Errors
 ```
 order_processing_errors_total     — failed order processing attempts by reason
 dlq_messages_total                — messages routed to dead letter queue
 retry_attempts_total              — retry attempts with backoff by orderId
 ```
 
-### 4. 🔥 Saturation
+</td>
+</tr>
+<tr>
+<td width="60" align="center">
+
+![Saturation](./saturation.svg)
+
+</td>
+<td>
+
+### 4. Saturation
 ```
 redis_memory_usage_bytes          — cache memory pressure
 postgresql_connections_active     — database connection pool usage
 kafka_consumer_lag_offsets        — consumer lag per partition
 ```
+
+</td>
+</tr>
+</table>
 
 ### Grafana Dashboards
 
