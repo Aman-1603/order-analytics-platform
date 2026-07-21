@@ -205,7 +205,7 @@ This platform is fully instrumented with the **Four Golden Signals**:
 <tr>
 <td width="60" align="center">
 
-![Latency](./latency.svg)
+![Latency](https://raw.githubusercontent.com/Aman-1603/order-analytics-platform/main/latency.svg)
 
 </td>
 <td>
@@ -222,7 +222,7 @@ kafka_consumer_lag_seconds        — time between message produced and consumed
 <tr>
 <td width="60" align="center">
 
-![Traffic](./traffic.svg)
+![Traffic](https://raw.githubusercontent.com/Aman-1603/order-analytics-platform/main/traffic.svg)
 
 </td>
 <td>
@@ -239,7 +239,7 @@ kafka_messages_consumed_total     — total messages processed by consumers
 <tr>
 <td width="60" align="center">
 
-![Errors](./errors.svg)
+![Errors](https://raw.githubusercontent.com/Aman-1603/order-analytics-platform/main/errors.svg)
 
 </td>
 <td>
@@ -256,7 +256,7 @@ retry_attempts_total              — retry attempts with backoff by orderId
 <tr>
 <td width="60" align="center">
 
-![Saturation](./saturation.svg)
+![Saturation](https://raw.githubusercontent.com/Aman-1603/order-analytics-platform/main/saturation.svg)
 
 </td>
 <td>
