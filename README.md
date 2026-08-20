@@ -491,5 +491,14 @@ Push to main
 
 *Built with Node.js · Kafka · Redis · PostgreSQL · Docker · Prometheus · Grafana*
 
+## 🧠 Engineering Decisions & Lessons Learned
+
+| Decision | Why | What I Learned |
+|----------|-----|----------------|
+| Kafka over RabbitMQ | Better partition strategy for ordered processing | Partition-by-orderId ensures no race conditions |
+| Redis Cache-Aside over Write-Through | More control over cache invalidation | Cache-aside is safer for order status updates |
+| DLQ over silent failures | Every failed order must be traceable | Silent failures kill production trust |
+| PostgreSQL over MongoDB | Orders need ACID guarantees | Consistency > flexibility for financial data |
+
 </div>
 > 💡 **Note:** This platform is actively maintained and updated regularly.
