@@ -492,3 +492,4 @@ Push to main
 *Built with Node.js · Kafka · Redis · PostgreSQL · Docker · Prometheus · Grafana*
 
 </div>
+> 💡 **Note:** This platform is actively maintained and updated regularly.
