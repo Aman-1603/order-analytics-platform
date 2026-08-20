@@ -471,6 +471,7 @@ Push to main
 | Cache Hit Rate | ~85% |
 | Kafka Partition Strategy | partition-by-orderId (ordered processing) |
 | DLQ Recovery Rate | > 96% (exponential backoff) |
+| Last Updated | August 2026 |
 
 ---
 
