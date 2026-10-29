@@ -30,7 +30,7 @@ app.MapPost("/orders", async (
         return Results.BadRequest(new { message = "Missing or invalid required fields" });
     }
 
-    var order = new Order
+    var order = new OrderAnalytics.Api.Models.Order
     {
         UserId = request.UserId.Trim(),
         Items = request.Items,
