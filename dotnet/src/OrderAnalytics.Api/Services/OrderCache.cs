@@ -21,7 +21,7 @@ public class OrderCache
         return value.HasValue ? value.ToString() : null;
     }
 
-    public Task SetAsync(Order order)
+    public Task SetAsync(OrderAnalytics.Api.Models.Order order)
     {
         var json = JsonSerializer.Serialize(order);
         return _db.StringSetAsync(Key(order.Id!), json, Ttl);
