@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using OrderAnalytics.Api.Models;
 using OrderAnalytics.Api.Services;
@@ -9,11 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 var mongoUri = Environment.GetEnvironmentVariable("MONGODB_URI")
     ?? throw new InvalidOperationException("MONGODB_URI is not set");
 var redisUrl = Environment.GetEnvironmentVariable("REDIS_URL") ?? "localhost:6379";
+var kafkaBroker = Environment.GetEnvironmentVariable("KAFKA_BROKER") ?? "localhost:9092";
 
 builder.Services.AddSingleton<MongoDB.Driver.IMongoClient>(_ => new MongoDB.Driver.MongoClient(mongoUri));
 builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisUrl));
 builder.Services.AddSingleton<OrderRepository>();
 builder.Services.AddSingleton<OrderCache>();
+builder.Services.AddSingleton(_ => new OrderEventPublisher(kafkaBroker));
 
 var app = builder.Build();
 
@@ -21,7 +22,8 @@ app.MapGet("/health", () => Results.Ok(new { status = "Order Service is running"
 
 app.MapPost("/orders", async (
     [FromBody] CreateOrderRequest request,
-    OrderRepository repo) =>
+    OrderRepository repo,
+    OrderEventPublisher publisher) =>
 {
     if (string.IsNullOrWhiteSpace(request.UserId)
         || request.Items is null
@@ -37,8 +39,17 @@ app.MapPost("/orders", async (
         Status = "CREATED",
     };
 
-    var created = await repo.CreateAsync(order);
-    return Results.Created($"/orders/{created.Id}", created);
+    try
+    {
+        var created = await repo.CreateAsync(order);
+        await publisher.PublishOrderCreatedAsync(created);
+        return Results.Created($"/orders/{created.Id}", created);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"createOrder error: {ex.Message}");
+        return Results.Problem("Internal server error", statusCode: 500);
+    }
 });
 
 app.MapGet("/orders/{id}", async (
