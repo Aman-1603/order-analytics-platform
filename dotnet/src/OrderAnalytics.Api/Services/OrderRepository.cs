@@ -8,7 +8,7 @@ public class OrderRepository
 {
     private readonly IMongoCollection<Order> _orders;
 
-    public OrderRepository(IMongoClient client)
+    public OrderRepository(MongoDB.Driver.IMongoClient client)
     {
         var database = client.GetDatabase("orders");
         _orders = database.GetCollection<Order>("orders");
@@ -35,5 +35,19 @@ public class OrderRepository
         return await _orders
             .Find(o => o.Id == id)
             .FirstOrDefaultAsync(ct);
+    }
+
+    public async Task UpdateStatusAsync(string id, string status, CancellationToken ct = default)
+    {
+        if (!ObjectId.TryParse(id, out _))
+        {
+            return;
+        }
+
+        var update = Builders<Order>.Update
+            .Set(o => o.Status, status)
+            .Set(o => o.UpdatedAt, DateTime.UtcNow);
+
+        await _orders.UpdateOneAsync(o => o.Id == id, update, cancellationToken: ct);
     }
 }

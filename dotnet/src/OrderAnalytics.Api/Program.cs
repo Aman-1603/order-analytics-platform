@@ -15,6 +15,11 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer
 builder.Services.AddSingleton<OrderRepository>();
 builder.Services.AddSingleton<OrderCache>();
 builder.Services.AddSingleton(_ => new OrderEventPublisher(kafkaBroker));
+builder.Services.AddHostedService(sp => new OrderEventConsumer(
+    kafkaBroker,
+    sp.GetRequiredService<OrderRepository>(),
+    sp.GetRequiredService<OrderCache>(),
+    sp.GetRequiredService<ILogger<OrderEventConsumer>>()));
 
 var app = builder.Build();
 

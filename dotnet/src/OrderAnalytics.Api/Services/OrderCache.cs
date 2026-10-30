@@ -1,6 +1,5 @@
 using System.Text.Json;
 using StackExchange.Redis;
-using OrderAnalytics.Api.Models;
 
 namespace OrderAnalytics.Api.Services;
 
@@ -26,6 +25,9 @@ public class OrderCache
         var json = JsonSerializer.Serialize(order);
         return _db.StringSetAsync(Key(order.Id!), json, Ttl);
     }
+
+    // Drop the cached copy so the next read gets the latest status from MongoDB.
+    public Task RemoveAsync(string orderId) => _db.KeyDeleteAsync(Key(orderId));
 
     private static string Key(string orderId) => $"order:{orderId}";
 }
