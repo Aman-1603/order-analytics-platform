@@ -50,4 +50,20 @@ public class OrderRepository
 
         await _orders.UpdateOneAsync(o => o.Id == id, update, cancellationToken: ct);
     }
+
+    public async Task MarkFailedAsync(string id, string errorMessage, int retryCount, CancellationToken ct = default)
+    {
+        if (!ObjectId.TryParse(id, out _))
+        {
+            return;
+        }
+
+        var update = Builders<Order>.Update
+            .Set(o => o.Status, "FAILED")
+            .Set(o => o.ErrorMessage, errorMessage)
+            .Set(o => o.RetryCount, retryCount)
+            .Set(o => o.UpdatedAt, DateTime.UtcNow);
+
+        await _orders.UpdateOneAsync(o => o.Id == id, update, cancellationToken: ct);
+    }
 }
